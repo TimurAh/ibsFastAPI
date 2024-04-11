@@ -26,7 +26,24 @@ async def convert_number(number: Annotated[int | str, Body()]) -> ConverterRespo
         "roman": "X"
     }
     """
+    list_rim_nums = {'M': 1000, 'CM': 900, 'D': 500, 'CD': 400, 'C': 100, 'XC': 90, 'L': 50, 'XL': 40, 'X': 10, 'IX': 9,
+                     'V': 5, 'IV': 4, 'I': 1}
+    roman_answer = ''
+    number_answer = 0
+    if isinstance(number, int):
+        number_answer = number
+        for letter, value in list_rim_nums.items():
+            while number >= value:
+                roman_answer += letter
+                number -= value
+    elif isinstance(number, str):
+        roman_answer=number
+        for letter, value in list_rim_nums.items():
+            while number.find(letter) != -1 :
+                print(letter)
+                number_answer+=value
+                number=number.replace(letter,'',1)
+                print('Убрали, получили ' +number)
 
-    converter_response = ConverterResponse()
-
+    converter_response = ConverterResponse(arabic=number_answer,roman=roman_answer)
     return converter_response

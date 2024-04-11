@@ -22,9 +22,9 @@ router = APIRouter(tags=["Стажировка"])
         "list_of_skills": ["ловкий", "смелый"], # необязательное
         "mapping": {
             list_of_ids: [1, "два"],
-            tags: {"стажировка", }  
+            tags: {"стажировка" }  
         },
-    
+
     }
 }
 
@@ -33,6 +33,8 @@ router = APIRouter(tags=["Стажировка"])
 Используйте библиотеку pydantic.
 
 """
+
+
 @router.post("/check_json", description="Задание_3. Валидация json")
 async def check_json(body: BigJson) -> BigJson:
     """ """

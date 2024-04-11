@@ -1,9 +1,11 @@
+import json
+
 from fastapi import APIRouter
 
 from app.core import DataGenerator
 
 router = APIRouter(tags=["API для хранения файлов"])
-
+import traceback
 """
 Задание_6. 
 
@@ -22,12 +24,14 @@ API должно принимать json, по типу:
 (Подумать, как переисползовать код из задания 5)
 """
 @router.post("/generate_file", description="Задание_6. Конвертер")
-async def generate_file() -> int:
+async def generate_file(file_type: str, matrix_size: int) -> int:
     """Описание."""
-
-    data = DataGenerator()
-    data.generate()
-    data.to_file()
-    file_id: int = data.file_id
-
+    print('нажали на кнопку')
+    try:
+        data = DataGenerator()
+        data.generate(matrix_size)
+        data.to_file('', file_type)
+        file_id: int = data.file_id
+    except Exception as err:
+        print(traceback.format_exc())
     return file_id

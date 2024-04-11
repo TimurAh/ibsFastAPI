@@ -1,5 +1,7 @@
-from fastapi import APIRouter
+import shutil
 
+from fastapi import APIRouter, UploadFile
+from fastapi.responses import FileResponse
 
 router = APIRouter(tags=["API для хранения файлов"])
 
@@ -11,12 +13,18 @@ a.	Написать API для добавления(POST) "/upload_file" и ск
 b.	Добавить архивирование к post запросу, то есть файл должен сжиматься и сохраняться в ZIP формате.
 с*.Добавить аннотации типов.
 """
+fake_db_files={'id':'namefile'}
 @router.post("/upload_file", description="Задание_5. API для хранения файлов")
-async def upload_file(file):
+async def upload_file(file: UploadFile ):
     """Описание."""
+    file_id:int = 0 #нужна БД, где будут id и имя нашего файла
 
-    file_id: int
-
+    with open('app/files/' + file.filename, "wb") as wf:
+        file_id+=1
+        fake_db_files[1] = file.filename
+        print(file.content_type)
+        shutil.copyfileobj(file.file, wf)
+        file.file.close()
     return file_id
 
 
@@ -24,6 +32,6 @@ async def upload_file(file):
 async def download_file(file_id: int):
     """Описание."""
 
-    file = None
+    file = FileResponse("app/files/"+fake_db_files[file_id])
 
     return file

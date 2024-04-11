@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response
-
+from functools import wraps
 router = APIRouter(tags=["Стажировка"])
 
 """
@@ -9,12 +9,19 @@ router = APIRouter(tags=["Стажировка"])
 Оберните роут new_request() этим декоратором.
 Подумать, как хранить переменную с кол-вом сделаных запросов.
 """
-def count_requests():
-    pass
+fake_db_count={'count':0}#можно сделать через глобальную переменную, но не красиво
+def count_requests(count_requests_this):
+
+    @wraps(count_requests_this)
+    async def wrapper(*args, **kwargs):
+        fake_db_count['count'] = fake_db_count['count'] + 1
+        return await count_requests_this(*args, **kwargs)
+    return wrapper
 
 
 @router.get("/new_request", description="Задание_8. Декоратор - счётчик запросов.")
+@count_requests
 async def new_request():
     """Возвращает кол-во сделанных запросов."""
 
-    return Response()
+    return str(fake_db_count['count'])

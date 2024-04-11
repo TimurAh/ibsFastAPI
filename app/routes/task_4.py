@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+import json
+
+from fastapi import APIRouter, UploadFile, File
 
 from app.core import average_age_by_position
 
@@ -36,9 +38,11 @@ router = APIRouter(tags=["Стажировка"])
 В таких случаях ожидается строка с ошибкой и status code 400.
 """
 @router.post("/get_average_age_by_position", description="Задание_4. Работа с pandas и csv")
-async def get_average_age_by_position(file):
+async def get_average_age_by_position(file: UploadFile):
     """"""
 
     result = average_age_by_position(file)
+    print(result)
+    return json.loads(result)
 
-    return result
+#если не забуду, добавлю проверку и тд, пока иду дальше
